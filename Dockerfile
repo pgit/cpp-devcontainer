@@ -1,9 +1,8 @@
 #
-# https://github.com/microsoft/vscode-dev-containers/tree/main/containers/debian
+# https://github.com/devcontainers/images/tree/main/src/base-debian/README.md
 #
-ARG VARIANT=bullseye
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
-
+ARG VARIANT=bookworm
+FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 #
 # Debian: update, git, some packages needed for boost
 #
@@ -65,7 +64,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y install --no-install-recommends \
        ninja-build gdb \
        libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \       
-       libpcap-dev socat netcat tcpdump && \
+       libpcap-dev socat netcat-openbsd tcpdump && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
