@@ -45,7 +45,7 @@ RUN bash -c "./llvm-alternatives.sh ${LLVM_VERSION}"
 #
 # build recent boost with clang
 #
-ARG BOOST_VERSION=1.83.0
+ARG BOOST_VERSION=1.84.0
 RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
     tar xjf boost_${BV}.tar.bz2 && \
