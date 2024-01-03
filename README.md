@@ -14,7 +14,7 @@ OS is Debian-12 "bookworm".
 
 ## [Dockerfile](Dockerfile)
 
-Currently, this is a monolithic image, but I'm following the devcontainer standardization efforts and maybe add support for features later.
+Currently, this is a monolithic image, but I'm following the devcontainer standardization efforts and maybe add support for [features](https://code.visualstudio.com/blogs/2022/09/15/dev-container-features) later.
 
 ## [.devcontainer](.devcontainer)
 
@@ -25,4 +25,5 @@ The [.devcontainer/Dockerfile](.devcontainer/Dockerfile) adds a small layer on t
 ## Building
 
 ```bash
+docker build -t psedoc/cpp-devcontainer:0.4 . -t psedoc/cpp-devcontainer:latest -t psedoc/cpp-devcontainer:bookworm
 ```

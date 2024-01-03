@@ -53,7 +53,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     cd boost_${BV} && \
     ./bootstrap.sh --with-toolset=clang && \
     ./b2 -j8 --with-system --with-thread --with-date_time --with-regex --with-serialization \
-             --with-filesystem --with-coroutine --with-url install && \
+             --with-filesystem --with-coroutine --with-url --with-cobalt install && \
     cd .. && \
     rm -rf boost_${BV}
 
@@ -137,4 +137,14 @@ RUN git clone https://github.com/ericniebler/range-v3.git && \
     cp -ar range-v3/include /usr/local/include/range-v3 && \
     rm -rf range-v3
 
+#
+# googletest
+#
+RUN git clone https://github.com/google/googletest.git && \
+    cd googletest && \
+    mkdir build && \
+    cd build && \
+    cmake .. &&  \
+    make install
+    
 # -------------------------------------------------------------------------------------------------
