@@ -18,7 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # https://pspdfkit.com/blog/2020/visual-studio-code-cpp-docker/
 #
 ARG VARIANT
-ARG LLVM_VERSION=17
+ARG LLVM_VERSION=18
 ARG LLVM_GPG_FINGERPRINT=6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
     echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" >> /etc/apt/sources.list && \
@@ -64,14 +64,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y install --no-install-recommends \
        ninja-build gdb \
        libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \       
-       libpcap-dev socat netcat-openbsd tcpdump && \
+       libpcap-dev socat netcat-openbsd tcpdump tcpflow && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=3.27.1
+ARG CMAKE_VERSION=3.28.3
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
@@ -96,7 +96,7 @@ ENV CXXFLAGS="-stdlib=libc++"
 #
 # fmt
 #
-ARG FMT_VERSION=10.1.1
+ARG FMT_VERSION=10.2.1
 RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FMT_VERSION}.zip && \
     unzip fmt-${FMT_VERSION}.zip && \
     cd fmt-${FMT_VERSION} && \
