@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.7 (2025-07-27)
+### Changed
+- Updated `CMake` from 3.29.2 to 3.30.1.
+
 ## Version 0.6 (2024-03-10)
 ### Added
 - Added `tcpflow` to the set of networking utilities.
