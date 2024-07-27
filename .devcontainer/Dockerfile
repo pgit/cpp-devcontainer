@@ -1,7 +1,7 @@
 #
 # https://github.com/pgit/cpp-devcontainer/
 #
-FROM docker.io/psedoc/cpp-devcontainer:ltest
+FROM docker.io/psedoc/cpp-devcontainer:latest
 
 #
 # enable persistent bash history in container (needs custom volume, see devcontainer.json)

@@ -32,7 +32,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
         clang-format-${LLVM_VERSION} \
         clang-tidy-${LLVM_VERSION} \
         clangd-${LLVM_VERSION} \
-        lldb-${LLVM_VERSION} \        
+        lldb-${LLVM_VERSION} \
         libunwind-${LLVM_VERSION}-dev \
         libclang-rt-${LLVM_VERSION}-dev && \
     apt-get clean && \
@@ -43,35 +43,42 @@ ARG LLVM_VERSION
 RUN bash -c "./llvm-alternatives.sh ${LLVM_VERSION}"
 
 #
+# other development libraries and network utilities
+#
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
+    apt-get -y install --no-install-recommends \
+       ninja-build gdb \
+       libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \
+       libpcap-dev socat netcat-openbsd tcpdump tcpflow \
+       make binutils autoconf automake autotools-dev libtool pkg-config \
+       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev ruby-dev bison libelf-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+#
 # build recent boost with clang
 #
-ARG BOOST_VERSION=1.84.0
+# b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
+# https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
+#
+ARG BOOST_VERSION=1.85.0
 RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
     tar xjf boost_${BV}.tar.bz2 && \
     rm boost_${BV}.tar.bz2 && \
     cd boost_${BV} && \
     ./bootstrap.sh --with-toolset=clang && \
-    ./b2 -j8 --with-system --with-thread --with-date_time --with-regex --with-serialization \
-             --with-filesystem --with-coroutine --with-url --with-cobalt install && \
+    ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
+        --with-system --with-thread --with-date_time --with-regex --with-serialization \
+        --with-filesystem --with-coroutine --with-url --with-cobalt \
+        install && \
     cd .. && \
     rm -rf boost_${BV}
 
 #
-# other development libraries and network utilities
-#
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y install --no-install-recommends \
-       ninja-build gdb \
-       libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \       
-       libpcap-dev socat netcat-openbsd tcpdump tcpflow && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-#
 # recent CMake
 #
-ARG CMAKE_VERSION=3.28.3
+ARG CMAKE_VERSION=3.29.2
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
@@ -86,10 +93,12 @@ ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
 
 #
 # libc++, needed for cppcoro
+# be aware of https://stackoverflow.com/questions/56738708/c-stdbad-alloc-on-stdfilesystempath-append
 #
 ENV CXXFLAGS="-stdlib=libc++"
 # ENV CXXFLAGS="-stdlib=libc++ -fsanitize=thread -fno-omit-frame-pointer"
-# ENV LDFLAGS="-fsanitize=thread"
+# ENV LDFLAGS="-stdlib=libc++"
+# ENV LDFLAGS="--fsanitize=thread"
 
 # -------------------------------------------------------------------------------------------------
 
@@ -109,26 +118,26 @@ RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FM
 #
 # fmtlog
 #
-ARG FMTLOG_VERSION=2.2.1
-RUN git clone https://github.com/MengRao/fmtlog.git && \
-    cd fmtlog && \
-    git submodule init && \
-    git submodule update && \
-    ./build.sh && \
-    cp fmtlog.h /usr/include && \
-    cp .build/libfmtlog-* /usr/lib && \
-    cd .. && rm -rf fmtlog
+# ARG FMTLOG_VERSION=2.2.1
+# RUN git clone https://github.com/MengRao/fmtlog.git && \
+#     cd fmtlog && \
+#     git submodule init && \
+#     git submodule update && \
+#     ./build.sh && \
+#     cp fmtlog.h /usr/include && \
+#     cp .build/libfmtlog-* /usr/lib && \
+#     cd .. && rm -rf fmtlog
 
 #
 # cppcoro
-# 
-RUN git clone https://github.com/andreasbuhr/cppcoro && \
-    cd cppcoro && \
-    mkdir build && \
-    cd build && \
-    cmake -GNinja .. && \
-    ninja install && \
-    cd ../.. && rm -rf cppcoro
+#
+# RUN git clone https://github.com/andreasbuhr/cppcoro && \
+#     cd cppcoro && \
+#     mkdir build && \
+#     cd build && \
+#     cmake -GNinja .. && \
+#     ninja install && \
+#     cd ../.. && rm -rf cppcoro
 
 #
 # range-v3
@@ -146,5 +155,5 @@ RUN git clone https://github.com/google/googletest.git && \
     cd build && \
     cmake .. &&  \
     make install
-    
+
 # -------------------------------------------------------------------------------------------------

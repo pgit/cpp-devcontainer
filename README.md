@@ -25,5 +25,5 @@ The [.devcontainer/Dockerfile](.devcontainer/Dockerfile) adds a small layer on t
 ## Building
 
 ```bash
-docker build -t psedoc/cpp-devcontainer:0.4 . -t psedoc/cpp-devcontainer:latest -t psedoc/cpp-devcontainer:bookworm
+docker build -t psedoc/cpp-devcontainer:0.6 . -t psedoc/cpp-devcontainer:latest -t psedoc/cpp-devcontainer:bookworm
 ```
