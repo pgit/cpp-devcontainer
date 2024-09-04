@@ -1,6 +1,12 @@
 # CHANGELOG.md
 
-## Version 0.7 (2025-07-27)
+## Version 0.8 (2024-09-04)
+### Changed
+- Updated `CMake` from 3.30.1 to 3.30.3.
+- Updated `boost` from 1.85.0 to 1.86.0.
+- Updated `llvm` to version 18.1.8.
+
+## Version 0.7 (2024-07-27)
 ### Changed
 - Updated `CMake` from 3.29.2 to 3.30.1.
 
