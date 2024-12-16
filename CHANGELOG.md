@@ -1,5 +1,16 @@
 # CHANGELOG.md
 
+## Version 0.10 (2024-12-16)
+### Changed
+- Updated `boost` from 1.86 to 1.87
+- Updated `CMake` from 3.30.1 to 3.30.3.
+- Updated `llvm` to version 19.1.6
+
+## Version 0.9
+### Changed
+- Updated `CMake` from 3.30.1 to 3.30.3.
+- Updated `llvm` to version 19.1.2
+
 ## Version 0.8 (2024-09-04)
 ### Changed
 - Updated `CMake` from 3.30.1 to 3.30.3.

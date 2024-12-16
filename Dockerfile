@@ -18,7 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # https://pspdfkit.com/blog/2020/visual-studio-code-cpp-docker/
 #
 ARG VARIANT
-ARG LLVM_VERSION=18
+ARG LLVM_VERSION=19
 ARG LLVM_GPG_FINGERPRINT=6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
     echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" >> /etc/apt/sources.list && \
@@ -61,7 +61,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BOOST_VERSION=1.86.0
+ARG BOOST_VERSION=1.87.0
 RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
     tar xjf boost_${BV}.tar.bz2 && \
@@ -78,7 +78,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=3.30.3
+ARG CMAKE_VERSION=3.31.2
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
