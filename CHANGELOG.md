@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.10 (2025-01-05)
+### Changed
+- Added `program_options` to `boost`.
+
 ## Version 0.10 (2024-12-16)
 ### Changed
 - Updated `boost` from 1.86 to 1.87

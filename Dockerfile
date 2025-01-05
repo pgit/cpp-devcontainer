@@ -63,14 +63,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 ARG BOOST_VERSION=1.87.0
 RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
-    wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
+    wget https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
     tar xjf boost_${BV}.tar.bz2 && \
     rm boost_${BV}.tar.bz2 && \
     cd boost_${BV} && \
     ./bootstrap.sh --with-toolset=clang && \
     ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
         --with-system --with-thread --with-date_time --with-regex --with-serialization \
-        --with-filesystem --with-coroutine --with-url --with-cobalt \
+        --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
         install && \
     cd .. && \
     rm -rf boost_${BV}
