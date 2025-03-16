@@ -1,6 +1,11 @@
 # CHANGELOG.md
 
-## Version 0.10 (2025-01-05)
+## Version 0.12 (2025-03-16)
+### Changed
+- Rebuild with latest security updates.
+- Updated `CMake` to 3.31.6.
+
+## Version 0.11 (2025-01-05)
 ### Changed
 - Added `program_options` to `boost`.
 

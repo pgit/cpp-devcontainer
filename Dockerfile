@@ -78,7 +78,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=3.31.2
+ARG CMAKE_VERSION=3.31.6
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
@@ -105,13 +105,17 @@ ENV CXXFLAGS="-stdlib=libc++"
 #
 # fmt
 #
+# FIXME: With LLVM, there are warnings about specializing in namespace std.
+#        Added -DFMT_TEST=no to skip building the tests.
+#
+# ARG FMT_VERSION=11.1.4
 ARG FMT_VERSION=10.2.1
 RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FMT_VERSION}.zip && \
     unzip fmt-${FMT_VERSION}.zip && \
     cd fmt-${FMT_VERSION} && \
     mkdir build && \
     cd build && \
-    cmake .. && \
+    cmake -DFMT_TEST=no .. && \
     make -j 20 install && \
     cd ../.. && rm -rf fmt-${FMT_VERSION}.zip fmt-${FMT_VERSION}
 
