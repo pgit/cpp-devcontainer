@@ -1,5 +1,13 @@
 # CHANGELOG.md
 
+## Version 1.0 (2025-05-19)
+### Changed
+- Rebuild with latest security updates.
+- Updated `CMake` to 4.0.1.
+- Updated `llvm` to version 20.1.4.
+- Updated `boost` to version 1.88.
+- Use `-j$(nproc)` for building.
+
 ## Version 0.12 (2025-03-16)
 ### Changed
 - Rebuild with latest security updates.
