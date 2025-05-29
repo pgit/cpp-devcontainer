@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## Version 0.13 (2025-05-29)
+### Changed
+- Rebuild with latest security updates.
+- Updated `boost` to 1.88 and added `boost::process`.
+- Updated `CMake` to 3.31.7.
+
 ## Version 0.12 (2025-03-16)
 ### Changed
 - Rebuild with latest security updates.

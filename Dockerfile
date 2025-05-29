@@ -61,7 +61,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BOOST_VERSION=1.87.0
+ARG BOOST_VERSION=1.88.0
 RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     wget https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
     tar xjf boost_${BV}.tar.bz2 && \
@@ -71,6 +71,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
     ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
         --with-system --with-thread --with-date_time --with-regex --with-serialization \
         --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
+        --with-process \
         install && \
     cd .. && \
     rm -rf boost_${BV}
@@ -78,7 +79,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=3.31.6
+ARG CMAKE_VERSION=3.31.7
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
