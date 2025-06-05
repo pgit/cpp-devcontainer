@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## Version 0.14 (2025-06-05)
+### Fixed
+- Remove `/googletest` after installing.
+### Added
+- Added `gtest-parallel`.
+
 ## Version 0.13 (2025-05-29)
 ### Changed
 - Rebuild with latest security updates.

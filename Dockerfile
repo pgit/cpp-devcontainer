@@ -159,6 +159,15 @@ RUN git clone https://github.com/google/googletest.git && \
     mkdir build && \
     cd build && \
     cmake .. &&  \
-    make install
+    make install && \
+    rm -rf googletest
+
+#
+# gtest-parallel
+#
+RUN cd /opt && \
+    git clone https://github.com/google/gtest-parallel.git && \
+    cd /usr/local/bin && \
+    ln -s /opt/gtest-parallel/gtest-parallel
 
 # -------------------------------------------------------------------------------------------------
