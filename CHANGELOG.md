@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.15 (2025-06-06)
+### Changed
+- Updated `llvm` to version 20.1.7.
+
 ## Version 0.14 (2025-06-05)
 ### Fixed
 - Remove `/googletest` after installing.
