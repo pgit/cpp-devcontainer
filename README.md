@@ -27,3 +27,4 @@ The [.devcontainer/Dockerfile](.devcontainer/Dockerfile) adds a small layer on t
 ```bash
 docker build -t psedoc/cpp-devcontainer:VERSION . -t psedoc/cpp-devcontainer:latest -t psedoc/cpp-devcontainer:bookworm
 ```
+A new image will be automatically built on [Docker HUB](https://hub.docker.com/repository/docker/psedoc/cpp-devcontainer/general) when a tag is pushed.
