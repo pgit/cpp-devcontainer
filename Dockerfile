@@ -61,12 +61,11 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BOOST_VERSION=1.88.0
-RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
-    wget https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BV}.tar.bz2 && \
-    tar xjf boost_${BV}.tar.bz2 && \
-    rm boost_${BV}.tar.bz2 && \
-    cd boost_${BV} && \
+ARG BV=1.88.0
+RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-b2-nodocs.tar.xz && \
+    tar xJf boost-${BV}-b2-nodocs.tar.xz && \
+    rm boost-${BV}-b2-nodocs.tar.xz && \
+    cd boost-${BV}* && \
     ./bootstrap.sh --with-toolset=clang && \
     ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
         --with-system --with-thread --with-date_time --with-regex --with-serialization \
@@ -74,7 +73,7 @@ RUN BV=$(echo "$BOOST_VERSION"|tr . _) && \
         --with-process \
         install && \
     cd .. && \
-    rm -rf boost_${BV}
+    rm -rf boost-${BV}*
 
 #
 # recent CMake
