@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.16 (2025-06-06)
+### Changed
+- Updated `boost` to version 1.89. When using this version, a change to your `CMakeLists.txt` may be becessary: Instead of `find_package(Boost 1.88 COMPONENTS system ...)`, the `system` component must be made optional by using `find_package(Boost 1.88 COMPONENTS ... OPTIONAL_COMPONENTS system ...)`.
+
 ## Version 0.15 (2025-06-06)
 ### Changed
 - Updated `llvm` to version 20.1.7.

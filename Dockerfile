@@ -61,7 +61,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BV=1.88.0
+ARG BV=1.89.0
 RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-b2-nodocs.tar.xz && \
     tar xJf boost-${BV}-b2-nodocs.tar.xz && \
     rm boost-${BV}-b2-nodocs.tar.xz && \
