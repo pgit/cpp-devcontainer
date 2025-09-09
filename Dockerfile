@@ -18,7 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # https://pspdfkit.com/blog/2020/visual-studio-code-cpp-docker/
 #
 ARG VARIANT
-ARG LLVM_VERSION=20
+ARG LLVM_VERSION=21
 ARG LLVM_GPG_FINGERPRINT=6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
     echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" >> /etc/apt/sources.list && \
@@ -54,6 +54,15 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
        zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev ruby-dev bison libelf-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+#
+# TEST: add libstdc++-15-dev from testing
+#
+# RUN echo >>/etc/apt/sources.list "deb http://deb.debian.org/debian forky main" && \
+#     apt-get update && export DEBIAN_FRONTEND=noninteractive && \
+#     apt-get -y install g++-15 && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
 #
 # build recent boost with clang
