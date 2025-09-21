@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.18 (2025-09-21)
+### Changed
+- Define `BOOST_PROCESS_USE_STD_FS` when building boost, see [Boost Process Issue \#516](https://github.com/boostorg/process/issues/516).
+
 ## Version 0.17 (2025-09-09)
 ### Changed
 - Updated `llvm` to 21.1.0.

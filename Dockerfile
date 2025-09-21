@@ -60,14 +60,19 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 # RUN echo >>/etc/apt/sources.list "deb http://deb.debian.org/debian forky main" && \
 #     apt-get update && export DEBIAN_FRONTEND=noninteractive && \
-#     apt-get -y install g++-15 && \
+#     apt-get -y remove gcc-12 libstdc++-12-dev && \
+#     apt-get -y install g++-15 libstdc++-15-dev && \
+#     apt-get -y autoremove && \
 #     apt-get clean && \
 #     rm -rf /var/lib/apt/lists/*
+
+# RUN apt-get -y remove gcc-12 libstdc++-12-dev
 
 #
 # build recent boost with clang
 #
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
+#
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
 ARG BV=1.89.0
@@ -76,7 +81,7 @@ RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-$
     rm boost-${BV}-b2-nodocs.tar.xz && \
     cd boost-${BV}* && \
     ./bootstrap.sh --with-toolset=clang && \
-    ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
+    ./b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++ -DBOOST_PROCESS_USE_STD_FS" linkflags="-stdlib=libc++" -j 20 \
         --with-system --with-thread --with-date_time --with-regex --with-serialization \
         --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
         --with-process \
@@ -95,16 +100,16 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cm
     rm /tmp/cmake-install.sh && \
     ln -s /opt/cmake-${CMAKE_VERSION}/bin/* /usr/local/bin
 
-ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
-    CXX="/usr/bin/clang++-${LLVM_VERSION}" \
-    COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
-    LLDB="/usr/bin/lldb-${LLVM_VERSION}"
+# ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
+#     CXX="/usr/bin/clang++-${LLVM_VERSION}" \
+#     COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
+#     LLDB="/usr/bin/lldb-${LLVM_VERSION}"
 
 #
 # libc++, needed for cppcoro
 # be aware of https://stackoverflow.com/questions/56738708/c-stdbad-alloc-on-stdfilesystempath-append
 #
-ENV CXXFLAGS="-stdlib=libc++"
+# ENV CXXFLAGS="-stdlib=libc++"
 # ENV CXXFLAGS="-stdlib=libc++ -fsanitize=thread -fno-omit-frame-pointer"
 # ENV LDFLAGS="-stdlib=libc++"
 # ENV LDFLAGS="--fsanitize=thread"
@@ -116,6 +121,8 @@ ENV CXXFLAGS="-stdlib=libc++"
 #
 # FIXME: With LLVM, there are warnings about specializing in namespace std.
 #        Added -DFMT_TEST=no to skip building the tests.
+#
+# FIXME: Drop support for this and use std::format instead.
 #
 # ARG FMT_VERSION=11.1.4
 ARG FMT_VERSION=10.2.1
