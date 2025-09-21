@@ -100,16 +100,16 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cm
     rm /tmp/cmake-install.sh && \
     ln -s /opt/cmake-${CMAKE_VERSION}/bin/* /usr/local/bin
 
-# ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
-#     CXX="/usr/bin/clang++-${LLVM_VERSION}" \
-#     COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
-#     LLDB="/usr/bin/lldb-${LLVM_VERSION}"
+ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
+    CXX="/usr/bin/clang++-${LLVM_VERSION}" \
+    COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
+    LLDB="/usr/bin/lldb-${LLVM_VERSION}"
 
 #
 # libc++, needed for cppcoro
 # be aware of https://stackoverflow.com/questions/56738708/c-stdbad-alloc-on-stdfilesystempath-append
 #
-# ENV CXXFLAGS="-stdlib=libc++"
+ENV CXXFLAGS="-stdlib=libc++"
 # ENV CXXFLAGS="-stdlib=libc++ -fsanitize=thread -fno-omit-frame-pointer"
 # ENV LDFLAGS="-stdlib=libc++"
 # ENV LDFLAGS="--fsanitize=thread"
