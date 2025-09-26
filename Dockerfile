@@ -51,7 +51,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
        libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \
        libpcap-dev socat netcat-openbsd tcpdump tcpflow \
        make binutils autoconf automake autotools-dev libtool pkg-config \
-       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev ruby-dev bison libelf-dev && \
+       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev bison libelf-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
