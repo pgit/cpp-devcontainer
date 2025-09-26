@@ -1,7 +1,7 @@
 #
 # https://github.com/devcontainers/images/tree/main/src/base-debian/README.md
 #
-ARG VARIANT=bookworm
+ARG VARIANT=trixie
 FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 #
 # Debian: update, git, some packages needed for boost
