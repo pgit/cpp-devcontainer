@@ -20,8 +20,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 ARG VARIANT
 ARG LLVM_VERSION=21
 ARG LLVM_GPG_FINGERPRINT=6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-    echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" >> /etc/apt/sources.list && \
+RUN wget -q -O - https://apt.llvm.org/llvm-snapshot.gpg.key | \
+        gpg --dearmor -o /etc/apt/trusted.gpg.d/llvm-snapshot.gpg && \
+    echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" \
+        >> /etc/apt/sources.list.d/llvm-snapshot.list && \
     apt-get update && \
     apt-get -y install --no-install-recommends \
         llvm-${LLVM_VERSION} \
