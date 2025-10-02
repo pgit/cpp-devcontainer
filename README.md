@@ -10,7 +10,7 @@ This repository contains the Dockerfile for building a CPP development container
 * cppcoro
 * range-v3
 
-OS is Debian-12 "bookworm".
+OS is Debian-12 "trixie".
 
 ## [Dockerfile](Dockerfile)
 
@@ -25,6 +25,6 @@ The [.devcontainer/Dockerfile](.devcontainer/Dockerfile) adds a small layer on t
 ## Building
 
 ```bash
-docker build -t psedoc/cpp-devcontainer:VERSION . -t psedoc/cpp-devcontainer:latest -t psedoc/cpp-devcontainer:bookworm
+docker build -t psedoc/cpp-devcontainer:VERSION . -t psedoc/cpp-devcontainer:latest
 ```
 A new image will be automatically built on [Docker HUB](https://hub.docker.com/repository/docker/psedoc/cpp-devcontainer/general) when a tag is pushed.
