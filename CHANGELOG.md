@@ -8,6 +8,7 @@
 ## Version 0.19 (2025-09-26)
 ### Changed
 - Don't install `ruby-dev`, it attracts several packages with high CVS scores and it seems to be unused.
+- Updated to debian-13 `trixie`.
 
 ## Version 0.18 (2025-09-21)
 ### Changed
