@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## Version 0.20 (2025-10-02)
+### Changed
+- Added GDB pretty printers for `libc++`.
+- Updated `llvm` to 21.1.3.
+
 ## Version 0.19 (2025-09-26)
 ### Changed
 - Don't install `ruby-dev`, it attracts several packages with high CVS scores and it seems to be unused.
