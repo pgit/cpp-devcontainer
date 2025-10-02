@@ -45,19 +45,6 @@ ARG LLVM_VERSION
 RUN bash -c "./llvm-alternatives.sh ${LLVM_VERSION}"
 
 #
-# GDB pretty printers for libc++
-#
-ARG USERNAME=vscode
-RUN GDB=/usr/local/lib/gdb && \
-    mkdir -p $GDB && cd $GDB && \
-    wget https://raw.githubusercontent.com/llvm/llvm-project/9a30ada53d5ef8d651c75795af2f6e9c48a1eecb/libcxx/utils/gdb/libcxx/printers.py && \
-    cd /home/${USERNAME} && \
-    echo >>.gdbinit "python\nimport sys\nsys.path.insert(0, '$GDB')\n" \
-                    "from printers import register_libcxx_printer_loader\n" \
-                    "register_libcxx_printer_loader()" && \
-    chown ${USERNAME} .gdbinit
-
-#
 # other development libraries and network utilities
 #
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
@@ -199,5 +186,18 @@ RUN cd /opt && \
     git clone https://github.com/google/gtest-parallel.git && \
     cd /usr/local/bin && \
     ln -s /opt/gtest-parallel/gtest-parallel
+
+# -------------------------------------------------------------------------------------------------
+
+#
+# GDB pretty printers for libc++
+#
+ARG USERNAME=vscode
+RUN GDB=/usr/local/lib/gdb && \
+    mkdir -p $GDB && cd $GDB && \
+    wget https://raw.githubusercontent.com/llvm/llvm-project/9a30ada53d5ef8d651c75795af2f6e9c48a1eecb/libcxx/utils/gdb/libcxx/printers.py && \
+    cd /home/${USERNAME} && \
+    echo >>.gdbinit "python\nimport sys\nsys.path.insert(0, '$GDB')\nfrom printers import register_libcxx_printer_loader\nregister_libcxx_printer_loader()\nend" && \
+    chown ${USERNAME} .gdbinit
 
 # -------------------------------------------------------------------------------------------------
