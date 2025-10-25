@@ -53,7 +53,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
        libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \
        libpcap-dev socat netcat-openbsd tcpdump tcpflow \
        make binutils autoconf automake autotools-dev libtool pkg-config \
-       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev bison libelf-dev && \
+       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev bison libelf-dev \
+       golang-cfssl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -76,6 +77,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
+#
+# TODO: remove BOOST_PROCESS_USE_STD_FS in 1.90 (https://github.com/boostorg/process/issues/516)
 #
 ARG BV=1.89.0
 RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-b2-nodocs.tar.xz && \

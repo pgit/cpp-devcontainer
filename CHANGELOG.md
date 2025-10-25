@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## Version 0.21 (2025-10-25)
+### Added
+- Added `cfssl` for creating TLS keys and certificates.
+- Rebuilt and tagged v0.20 with `llvm` version 21.1.5.
+
 ## Version 0.20 (2025-10-02)
 ### Changed
 - Added GDB pretty printers for `libc++`.
