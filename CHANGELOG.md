@@ -1,9 +1,17 @@
 # CHANGELOG.md
 
+## Version 0.22 (2025-12-14)
+### Removed
+- Removed `cfssl` again, golang/stdlib flags a lot of vulnerabilities in the image.
+### Changed
+- Updated `boost` to 1.90.
+- Removed `BOOST_PROCESS_USE_STD_FS` from build, fixed by [#516](https://github.com/boostorg/process/issues/516).
+- Rebuilt and tagged v0.22 with `llvm` version 21.1.8.
+
 ## Version 0.21 (2025-10-25)
 ### Added
 - Added `cfssl` for creating TLS keys and certificates.
-- Rebuilt and tagged v0.20 with `llvm` version 21.1.5.
+- Rebuilt and tagged v0.21 with `llvm` version 21.1.5.
 
 ## Version 0.20 (2025-10-02)
 ### Changed

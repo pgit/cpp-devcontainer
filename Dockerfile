@@ -50,11 +50,10 @@ RUN bash -c "./llvm-alternatives.sh ${LLVM_VERSION}"
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y install --no-install-recommends \
        ninja-build gdb \
-       libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev zlib1g-dev liburing-dev \
+       libxml2-dev libcunit1-dev libev-dev libssl-dev libc-ares-dev libevent-dev liburing-dev \
        libpcap-dev socat netcat-openbsd tcpdump tcpflow \
        make binutils autoconf automake autotools-dev libtool pkg-config \
-       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev bison libelf-dev \
-       golang-cfssl && \
+       zlib1g-dev libjansson-dev libjemalloc-dev libsystemd-dev bison libelf-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -78,15 +77,13 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-# TODO: remove BOOST_PROCESS_USE_STD_FS in 1.90 (https://github.com/boostorg/process/issues/516)
-#
-ARG BV=1.89.0
+ARG BV=1.90.0
 RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-b2-nodocs.tar.xz && \
     tar xJf boost-${BV}-b2-nodocs.tar.xz && \
     rm boost-${BV}-b2-nodocs.tar.xz && \
     cd boost-${BV}* && \
     ./bootstrap.sh --with-toolset=clang && \
-    ./b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++ -DBOOST_PROCESS_USE_STD_FS" linkflags="-stdlib=libc++" -j 20 \
+    ./b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
         --with-system --with-thread --with-date_time --with-regex --with-serialization \
         --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
         --with-process \
