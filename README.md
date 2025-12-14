@@ -6,11 +6,9 @@ This repository contains the Dockerfile for building a CPP development container
 * Boost
 * CMake
 * fmt
-* fmtlog
-* cppcoro
 * range-v3
 
-OS is Debian-12 "trixie".
+OS is Debian-13 "trixie".
 
 ## [Dockerfile](Dockerfile)
 
