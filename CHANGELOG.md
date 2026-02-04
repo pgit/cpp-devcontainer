@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.23 (2026-02-04)
+### Fixed
+- Fixed LLVM repository, which still uses a SHA1 signature. That is is disallowed by Debian as of 2026-02-01. As a workaround, extended to 2026-12-31.
+
 ## Version 0.22 (2025-12-14)
 ### Removed
 - Removed `cfssl` again, golang/stdlib flags a lot of vulnerabilities in the image.

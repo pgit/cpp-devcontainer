@@ -24,6 +24,8 @@ RUN wget -q -O - https://apt.llvm.org/llvm-snapshot.gpg.key | \
         gpg --dearmor -o /etc/apt/trusted.gpg.d/llvm-snapshot.gpg && \
     echo "deb http://apt.llvm.org/${VARIANT}/ llvm-toolchain-${VARIANT}-${LLVM_VERSION} main" \
         >> /etc/apt/sources.list.d/llvm-snapshot.list && \
+    sed -i 's/^\(sha1.second_preimage_resistance\).*=.*/\1 = 2026-12-31/' \
+        /usr/share/apt/default-sequoia.config && \
     apt-get update && \
     apt-get -y install --no-install-recommends \
         llvm-${LLVM_VERSION} \
@@ -127,7 +129,8 @@ ENV CXXFLAGS="-stdlib=libc++"
 # FIXME: Drop support for this and use std::format instead.
 #
 # ARG FMT_VERSION=11.1.4
-ARG FMT_VERSION=10.2.1
+# ARG FMT_VERSION=10.2.1
+ARG FMT_VERSION=12.1.0
 RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FMT_VERSION}.zip && \
     unzip fmt-${FMT_VERSION}.zip && \
     cd fmt-${FMT_VERSION} && \
