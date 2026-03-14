@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.24 (2026-02-25)
+### Changed
+- Updated `llvm` to 22.1.0.
+
 ## Version 0.23 (2026-02-04)
 ### Fixed
 - Fixed LLVM repository, which still uses a SHA1 signature. That is is disallowed by Debian as of 2026-02-01. As a workaround, extended to 2026-12-31.

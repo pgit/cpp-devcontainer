@@ -18,7 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 # https://pspdfkit.com/blog/2020/visual-studio-code-cpp-docker/
 #
 ARG VARIANT
-ARG LLVM_VERSION=21
+ARG LLVM_VERSION=22
 ARG LLVM_GPG_FINGERPRINT=6084F3CF814B57C1CF12EFD515CF4D18AF4F7421
 RUN wget -q -O - https://apt.llvm.org/llvm-snapshot.gpg.key | \
         gpg --dearmor -o /etc/apt/trusted.gpg.d/llvm-snapshot.gpg && \
