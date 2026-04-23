@@ -79,14 +79,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BV=1.90.0
-RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-b2-nodocs.tar.xz && \
-    tar xJf boost-${BV}-b2-nodocs.tar.xz && \
-    rm boost-${BV}-b2-nodocs.tar.xz && \
+ARG BV=1.91.0-1
+RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-cmake.tar.xz && \
+    tar xJf boost-${BV}-cmake.tar.xz && \
+    rm boost-${BV}-cmake.tar.xz && \
     cd boost-${BV}* && \
     ./bootstrap.sh --with-toolset=clang && \
     ./b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
-        --with-system --with-thread --with-date_time --with-regex --with-serialization \
+        --with-thread --with-date_time --with-regex --with-serialization \
         --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
         --with-process \
         install && \
@@ -96,8 +96,8 @@ RUN wget https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-$
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=3.31.7
-RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
+ARG CMAKE_VERSION=4.3.2
+RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
     /tmp/cmake-install.sh --skip-license --prefix=/opt/cmake-${CMAKE_VERSION} && \
