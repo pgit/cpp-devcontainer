@@ -1,14 +1,21 @@
 # CHANGELOG.md
 
+## Version 0.26 (2026-08-03)
+### Changed
+- Updated `boost` to 1.92-beta1.
+- Updated `CMake` to 4.3.2.
+- Updated `fmtlib` to 12.2.0.
+- Rebuilt with `llvm` 22.1.8.
+
 ## Version 0.25 (2026-04-23)
 ### Changed
 - Updated `boost` to 1.91.
 - Updated `CMake` to 4.3.2.
-- Rebuilt with `llvm` to 22.1.4.
+- Rebuilt with `llvm` 22.1.4.
 
 ## Version 0.24 (2026-02-25)
 ### Changed
-- Rebuilt with `llvm` to 22.1.0.
+- Rebuilt with `llvm` 22.1.0.
 
 ## Version 0.23 (2026-02-04)
 ### Fixed

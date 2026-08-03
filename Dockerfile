@@ -79,7 +79,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-ARG BV=1.91.0-1
+# ARG BV=1.91.0-1
+ARG BV=1.92.0.beta1
 RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-cmake.tar.xz && \
     tar xJf boost-${BV}-cmake.tar.xz && \
     rm boost-${BV}-cmake.tar.xz && \
@@ -96,7 +97,7 @@ RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boo
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=4.3.2
+ARG CMAKE_VERSION=4.4.2
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
@@ -128,9 +129,9 @@ ENV CXXFLAGS="-stdlib=libc++"
 #
 # FIXME: Drop support for this and use std::format instead.
 #
-# ARG FMT_VERSION=11.1.4
 # ARG FMT_VERSION=10.2.1
-ARG FMT_VERSION=12.1.0
+# ARG FMT_VERSION=11.1.4
+ARG FMT_VERSION=12.2.0
 RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FMT_VERSION}.zip && \
     unzip fmt-${FMT_VERSION}.zip && \
     cd fmt-${FMT_VERSION} && \
