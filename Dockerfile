@@ -79,8 +79,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
-# ARG BV=1.91.0-1
-ARG BV=1.92.0.beta1
+ARG BV=1.92.0
 RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boost-${BV}-cmake.tar.xz && \
     tar xJf boost-${BV}-cmake.tar.xz && \
     rm boost-${BV}-cmake.tar.xz && \

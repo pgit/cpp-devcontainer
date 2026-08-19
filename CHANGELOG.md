@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.27 (2026-08-19)
+### Changed
+- Updated `boost` to 1.92.
+
 ## Version 0.26 (2026-08-03)
 ### Changed
 - Updated `boost` to 1.92-beta1.
