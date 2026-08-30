@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## Version 0.28 (2026-08-30)
+### Changed
+- Updated `llvm` to 23, rebuilt with 23.1.0.
+
 ## Version 0.27 (2026-08-19)
 ### Changed
 - Updated `boost` to 1.92.
