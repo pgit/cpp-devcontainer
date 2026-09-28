@@ -60,22 +60,26 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     rm -rf /var/lib/apt/lists/*
 
 #
-# TEST: add libstdc++-15-dev from testing
+# GCC: latest version available in Debian (trixie: 14)
 #
-# RUN echo >>/etc/apt/sources.list "deb http://deb.debian.org/debian forky main" && \
-#     apt-get update && export DEBIAN_FRONTEND=noninteractive && \
-#     apt-get -y remove gcc-12 libstdc++-12-dev && \
-#     apt-get -y install g++-15 libstdc++-15-dev && \
-#     apt-get -y autoremove && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
-
-# RUN apt-get -y remove gcc-12 libstdc++-12-dev
+ARG GCC_VERSION=14
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
+    apt-get -y install --no-install-recommends \
+        gcc-${GCC_VERSION} g++-${GCC_VERSION} libstdc++-${GCC_VERSION}-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 #
-# build recent boost with clang
+# Compiled libraries (boost, fmt, googletest) are built twice, as libc++ and libstdc++
+# are not ABI compatible:
 #
-# b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++"
+# 1) clang + libc++      --> /opt/libc++   (use -DCMAKE_PREFIX_PATH=/opt/libc++)
+# 2) gcc   + libstdc++   --> /usr/local    (default, found automatically)
+#
+ARG LIBCXX_PREFIX=/opt/libc++
+
+#
+# build recent boost
 #
 # https://stackoverflow.com/questions/8486077/how-to-compile-link-boost-with-clang-libc
 #
@@ -85,11 +89,17 @@ RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boo
     rm boost-${BV}-cmake.tar.xz && \
     cd boost-${BV}* && \
     ./bootstrap.sh --with-toolset=clang && \
-    ./b2 toolset=clang cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
-        --with-thread --with-date_time --with-regex --with-serialization \
+    sed -i "s/using clang ;/using clang : ${LLVM_VERSION} : clang++-${LLVM_VERSION} ;/" project-config.jam && \
+    echo "using gcc : ${GCC_VERSION} : g++-${GCC_VERSION} ;" >> project-config.jam && \
+    BOOST_LIBS="--with-thread --with-date_time --with-regex --with-serialization \
         --with-filesystem --with-coroutine --with-url --with-cobalt --with-program_options \
-        --with-process \
-        install && \
+        --with-process" && \
+    ./b2 toolset=clang-${LLVM_VERSION} cxxflags="-std=c++23 -stdlib=libc++" linkflags="-stdlib=libc++" -j 20 \
+        --build-dir=build-libc++ --prefix=${LIBCXX_PREFIX} \
+        $BOOST_LIBS install && \
+    ./b2 toolset=gcc-${GCC_VERSION} cxxflags="-std=c++23" -j 20 \
+        --build-dir=build-libstdc++ --prefix=/usr/local \
+        $BOOST_LIBS install && \
     cd .. && \
     rm -rf boost-${BV}*
 
@@ -104,16 +114,16 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cm
     rm /tmp/cmake-install.sh && \
     ln -s /opt/cmake-${CMAKE_VERSION}/bin/* /usr/local/bin
 
-ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
-    CXX="/usr/bin/clang++-${LLVM_VERSION}" \
-    COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
-    LLDB="/usr/bin/lldb-${LLVM_VERSION}"
+# ENV CC="/usr/bin/clang-${LLVM_VERSION}" \
+#     CXX="/usr/bin/clang++-${LLVM_VERSION}" \
+#     COV="/usr/bin/llvm-cov-${LLVM_VERSION}" \
+#     LLDB="/usr/bin/lldb-${LLVM_VERSION}"
 
 #
 # libc++, needed for cppcoro
 # be aware of https://stackoverflow.com/questions/56738708/c-stdbad-alloc-on-stdfilesystempath-append
 #
-ENV CXXFLAGS="-stdlib=libc++"
+# ENV CXXFLAGS="-stdlib=libc++"
 # ENV CXXFLAGS="-stdlib=libc++ -fsanitize=thread -fno-omit-frame-pointer"
 # ENV LDFLAGS="-stdlib=libc++"
 # ENV LDFLAGS="--fsanitize=thread"
@@ -134,35 +144,40 @@ ARG FMT_VERSION=12.2.0
 RUN wget https://github.com/fmtlib/fmt/releases/download/${FMT_VERSION}/fmt-${FMT_VERSION}.zip && \
     unzip fmt-${FMT_VERSION}.zip && \
     cd fmt-${FMT_VERSION} && \
-    mkdir build && \
-    cd build && \
-    cmake -DFMT_TEST=no .. && \
-    make -j 20 install && \
-    cd ../.. && rm -rf fmt-${FMT_VERSION}.zip fmt-${FMT_VERSION}
+    cmake -S . -B build-libc++ -G Ninja -DFMT_TEST=no -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_COMPILER=clang++-${LLVM_VERSION} \
+        -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+        -DCMAKE_INSTALL_PREFIX=${LIBCXX_PREFIX} && \
+    cmake --build build-libc++ --target install && \
+    cmake -S . -B build-libstdc++ -G Ninja -DFMT_TEST=no -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_COMPILER=g++-${GCC_VERSION} \
+        -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    cmake --build build-libstdc++ --target install && \
+    cd .. && rm -rf fmt-${FMT_VERSION}.zip fmt-${FMT_VERSION}
 
 #
-# fmtlog
+# spdlog
 #
-# ARG FMTLOG_VERSION=2.2.1
-# RUN git clone https://github.com/MengRao/fmtlog.git && \
-#     cd fmtlog && \
-#     git submodule init && \
-#     git submodule update && \
-#     ./build.sh && \
-#     cp fmtlog.h /usr/include && \
-#     cp .build/libfmtlog-* /usr/lib && \
-#     cd .. && rm -rf fmtlog
-
+# https://github.com/gabime/spdlog
 #
-# cppcoro
+# Uses the external fmt from the matching prefix instead of the bundled one.
 #
-# RUN git clone https://github.com/andreasbuhr/cppcoro && \
-#     cd cppcoro && \
-#     mkdir build && \
-#     cd build && \
-#     cmake -GNinja .. && \
-#     ninja install && \
-#     cd ../.. && rm -rf cppcoro
+# v1.17.0
+ARG SPDLOG_COMMIT=79524ddd08a4ec981b7fea76afd08ee05f83755d
+RUN git clone https://github.com/gabime/spdlog.git && \
+    cd spdlog && \
+    git checkout ${SPDLOG_COMMIT} && \
+    cmake -S . -B build-libc++ -G Ninja -DCMAKE_BUILD_TYPE=Release -DSPDLOG_FMT_EXTERNAL=ON \
+        -DCMAKE_CXX_COMPILER=clang++-${LLVM_VERSION} \
+        -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+        -DCMAKE_PREFIX_PATH=${LIBCXX_PREFIX} \
+        -DCMAKE_INSTALL_PREFIX=${LIBCXX_PREFIX} && \
+    cmake --build build-libc++ --target install && \
+    cmake -S . -B build-libstdc++ -G Ninja -DCMAKE_BUILD_TYPE=Release -DSPDLOG_FMT_EXTERNAL=ON \
+        -DCMAKE_CXX_COMPILER=g++-${GCC_VERSION} \
+        -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    cmake --build build-libstdc++ --target install && \
+    cd .. && rm -rf spdlog
 
 #
 # range-v3
@@ -176,11 +191,18 @@ RUN git clone https://github.com/ericniebler/range-v3.git && \
 #
 RUN git clone https://github.com/google/googletest.git && \
     cd googletest && \
-    mkdir build && \
-    cd build && \
-    cmake .. &&  \
-    make install && \
-    rm -rf googletest
+    cmake -S . -B build-libc++ -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER=clang-${LLVM_VERSION} \
+        -DCMAKE_CXX_COMPILER=clang++-${LLVM_VERSION} \
+        -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+        -DCMAKE_INSTALL_PREFIX=${LIBCXX_PREFIX} && \
+    cmake --build build-libc++ --target install && \
+    cmake -S . -B build-libstdc++ -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER=gcc-${GCC_VERSION} \
+        -DCMAKE_CXX_COMPILER=g++-${GCC_VERSION} \
+        -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    cmake --build build-libstdc++ --target install && \
+    cd .. && rm -rf googletest
 
 #
 # gtest-parallel

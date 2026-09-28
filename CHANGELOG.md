@@ -1,5 +1,14 @@
 # CHANGELOG.md
 
+## Version 0.30 (2026-09-28)
+Version 0.29 was deliberately skipped.
+### Added
+- `gcc` (latest in Debian, currently 14) alongside `llvm`.
+- `spdlog`, using the external `fmt`.
+### Changed
+- `boost`, `fmt`, `spdlog` and `googletest` are built twice: `libstdc++` builds in `/usr/local`, `libc++` builds in `/opt/libc++`. See [README](README.md#two-c-standard-libraries).
+- `CXXFLAGS=-stdlib=libc++` and `CC`/`CXX` are no longer set by default.
+
 ## Version 0.28 (2026-08-30)
 ### Changed
 - Updated `llvm` to 23, rebuilt with 23.1.0.
