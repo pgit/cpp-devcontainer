@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## Version 0.31 (2026-10-27)
+### Changed
+- Rebuilt with `llvm` 23.1.5.
+- Updated `CMake` to 4.4.5.
+
 ## Version 0.30 (2026-09-28)
 Version 0.29 was deliberately skipped.
 ### Added

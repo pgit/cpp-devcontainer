@@ -106,7 +106,7 @@ RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boo
 #
 # recent CMake
 #
-ARG CMAKE_VERSION=4.4.2
+ARG CMAKE_VERSION=4.4.5
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
     chmod u+x /tmp/cmake-install.sh && \
     mkdir /opt/cmake-${CMAKE_VERSION} && \
