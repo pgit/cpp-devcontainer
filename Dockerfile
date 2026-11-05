@@ -101,7 +101,8 @@ RUN wget -vv https://github.com/boostorg/boost/releases/download/boost-${BV}/boo
         --build-dir=build-libstdc++ --prefix=/usr/local \
         $BOOST_LIBS install && \
     cd .. && \
-    rm -rf boost-${BV}*
+    rm -rf boost-${BV}* && \
+    ldconfig
 
 #
 # recent CMake

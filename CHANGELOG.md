@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## Version 0.32 (2026-11-05)
+### Changed
+- Rebuilt with `llvm` 23.1.6 and Debian 13.7.
+### Fixed
+- Run `ldconfig` after installing boost, so the shared `libstdc++` boost libraries in `/usr/local/lib` are found at runtime (broken since 0.30).
+
 ## Version 0.31 (2026-10-27)
 ### Changed
 - Rebuilt with `llvm` 23.1.5.
